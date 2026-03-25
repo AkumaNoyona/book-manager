@@ -1,33 +1,33 @@
 <template>
-  <div class="app">
-    <header>
-      <h1>Менеджер книг</h1>
-      <p>Управляй своей библиотекой</p>
+  <div class="container py-4">
+    <header class="bg-gradient text-white p-4 rounded-3 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      <h1 class="display-4">Менеджер книг</h1>
+      <p class="lead">Управляй своей библиотекой</p>
     </header>
+
     <main>
       <AddBookForm @add-book="addBook" />
-
       <BookFilters
         v-model:searchQuery="searchQuery"
         v-model:filter="currentFilter"
         :books="books"
       />
 
-      <div v-if="filteredBooks.length === 0" class="empty-state">
-        <p>📚</p>
-        <p>Книги не найдены :(</p>
+      <div v-if="filteredBooks.length === 0" class="text-center py-5 text-muted">
+        <p class="display-1">📚</p>
+        <p class="h4">Книги не найдены :(</p>
         <p>Добавьте первую книгу или измените параметры поиска</p>
       </div>
 
-      <div v-else class="books-list">
-        <BookCard
-          v-for="book in filteredBooks"
-          :key="book.id"
-          :book="book"
-          @toggle="toggleBook(book.id)"
-          @delete="deleteBook(book.id)"
-          @rate="rateBook(book.id, $event)"
-        />
+      <div v-else class="row">
+        <div v-for="book in filteredBooks" :key="book.id" class="col-md-6 col-lg-4">
+          <BookCard
+            :book="book"
+            @toggle="toggleBook(book.id)"
+            @delete="deleteBook(book.id)"
+            @rate="rateBook(book.id, $event)"
+          />
+        </div>
       </div>
     </main>
   </div>
@@ -46,16 +46,13 @@ if (savedBooks) {
   books.value = JSON.parse(savedBooks)
 }
 
-// Фильтры
 const currentFilter = ref('all')
 const searchQuery = ref('')
 
-// Сохранение изменений
 watch(books, (newBooks) => {
   localStorage.setItem('books', JSON.stringify(newBooks))
 }, { deep: true })
 
-// Добавление книги
 const addBook = (bookData) => {
   const newBook = {
     id: Date.now(),
@@ -66,18 +63,14 @@ const addBook = (bookData) => {
   books.value.push(newBook)
 }
 
-// Переключение статуса
 const toggleBook = (id) => {
   const book = books.value.find(b => b.id === id)
   if (book) {
     book.completed = !book.completed
-    if (!book.completed) {
-      book.rating = 0
-    }
+    if (!book.completed) book.rating = 0
   }
 }
 
-// Оценка книги
 const rateBook = (id, rating) => {
   const book = books.value.find(b => b.id === id)
   if (book && book.completed) {
@@ -85,14 +78,12 @@ const rateBook = (id, rating) => {
   }
 }
 
-// Удаление книги
 const deleteBook = (id) => {
   if (confirm('Удалить книгу?')) {
     books.value = books.value.filter(b => b.id !== id)
   }
 }
 
-// Фильтрация и поиск
 const filteredBooks = computed(() => {
   return books.value
     .filter(book => {
@@ -110,51 +101,5 @@ const filteredBooks = computed(() => {
 </script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f0f2f5;
-  line-height: 1.6;
-}
-.app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-header h1 {
-  font-size: 2.5em;
-  margin-bottom: 5px;
-}
-main {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-.empty-state {
-  text-align: center;
-  padding: 40px;
-  color: #999;
-  font-size: 1.2em;
-}
-.empty-state p:first-child {
-  font-size: 3em;
-  margin-bottom: 20px;
-}
-.books-list {
-  margin-top: 20px;
-}
+/* Весь кастомный CSS удалён, стили от Bootstrap */
 </style>

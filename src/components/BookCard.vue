@@ -1,31 +1,39 @@
 <template>
-  <div class="book-card" :class="{ completed: book.completed }">
-    <div class="book-info">
-      <h3>{{ book.title }}</h3>
-      <p class="author">{{ book.author }}</p>
-      <span class="genre">{{ book.genre }}</span>
-    </div>
-
-    <div class="book-actions">
-      <div v-if="book.completed" class="rating">
-        <span
-          v-for="star in 5"
-          :key="star"
-          @click="$emit('rate', star)"
-        >
-          {{ star <= book.rating ? '★' : '☆' }}
-        </span>
+  <div class="card mb-3" :class="{ 'bg-light': book.completed }">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h5 class="card-title" :class="{ 'text-decoration-line-through text-muted': book.completed }">
+            {{ book.title }}
+          </h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+          <span class="badge bg-secondary">{{ book.genre }}</span>
+        </div>
+        <div>
+          <div v-if="book.completed" class="mb-2">
+            <span
+              v-for="star in 5"
+              :key="star"
+              class="fs-5 text-warning"
+              style="cursor: pointer"
+              @click="$emit('rate', star)"
+            >
+              {{ star <= book.rating ? '★' : '☆' }}
+            </span>
+          </div>
+          <div class="btn-group" role="group">
+            <button
+              @click="$emit('toggle')"
+              :class="['btn', book.completed ? 'btn-secondary' : 'btn-success']"
+            >
+              {{ book.completed ? 'Прочитано' : 'Отметить прочитанной' }}
+            </button>
+            <button @click="$emit('delete')" class="btn btn-danger">
+              ✕
+            </button>
+          </div>
+        </div>
       </div>
-
-      <button
-        @click="$emit('toggle')"
-        :class="['btn', book.completed ? 'btn-secondary' : 'btn-primary']"
-      >
-        {{ book.completed ? 'Прочитано' : 'Отметить прочитанной' }}
-      </button>
-      <button @click="$emit('delete')" class="btn btn-danger">
-        ✕
-      </button>
     </div>
   </div>
 </template>
@@ -34,86 +42,3 @@
 defineProps(['book'])
 defineEmits(['toggle', 'delete', 'rate'])
 </script>
-
-<style scoped>
-.book-card {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s;
-}
-.book-card.completed {
-  background: #f0f7f0;
-  opacity: 0.8;
-}
-.book-info {
-  flex: 1;
-}
-.book-info h3 {
-  margin-bottom: 4px;
-  color: #333;
-}
-.author {
-  color: #666;
-  font-size: 0.9em;
-  margin-bottom: 4px;
-}
-.genre {
-  background: #e0e0e0;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
-}
-.book-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.rating {
-  display: flex;
-  gap: 2px;
-}
-.rating span {
-  font-size: 20px;
-  cursor: pointer;
-  color: gold;
-}
-.rating span:hover {
-  transform: scale(1.2);
-}
-.btn {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background 0.3s;
-}
-.btn-primary {
-  background: #4CAF50;
-  color: white;
-}
-.btn-primary:hover {
-  background: #45a049;
-}
-.btn-secondary {
-  background: #2196F3;
-  color: white;
-}
-.btn-secondary:hover {
-  background: #1e87db;
-}
-.btn-danger {
-  background: #f44336;
-  color: white;
-  padding: 8px 12px;
-}
-.btn-danger:hover {
-  background: #da190b;
-}
-</style>
