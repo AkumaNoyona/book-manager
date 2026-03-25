@@ -1,0 +1,22 @@
+{
+  "homepage": "https://AkumaNoyona.github.io/book-manager",
+  "name": "book-manager",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.30"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "gh-pages": "^6.3.0",
+    "vite": "^8.0.1"
+  }
+}
